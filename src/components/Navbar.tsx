@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Search, ShoppingCart, User } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { Link } from 'react-router-dom';
 
