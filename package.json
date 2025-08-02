@@ -7,10 +7,14 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate-data": "vite-node src/scripts/runMigration.ts",
+    "setup-admin": "vite-node src/scripts/setupAdmin.ts",
+    "create-email-admin": "vite-node src/scripts/createEmailAdmin.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "firebase": "^12.0.0",
     "lucide-react": "^0.526.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -31,6 +35,7 @@
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4"
+    "vite": "^7.0.4",
+    "vite-node": "^3.2.4"
   }
 }

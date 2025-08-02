@@ -2,14 +2,15 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import ShirtCard from '../components/ShirtCard';
-import { collections } from '../data/collections';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { FaTruckFast } from 'react-icons/fa6';
 import { IoShieldCheckmark } from 'react-icons/io5';
 import { IoMdChatboxes } from 'react-icons/io';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Home: React.FC = () => {
-  const { allShirts } = useAppContext();
+  const { allShirts, collections, isLoading, error, refreshData } = useAppContext();
   const featuredShirts = allShirts.filter(shirt => shirt.featured).slice(0, 6);
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -24,6 +25,24 @@ const Home: React.FC = () => {
       carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <LoadingSpinner size="large" message="Cargando página principal..." />
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <ErrorMessage message={error} onRetry={refreshData} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

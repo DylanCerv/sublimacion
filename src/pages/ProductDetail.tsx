@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useShirt } from '../hooks/useFirebase';
 import ShirtCard from '../components/ShirtCard';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { Minus, Plus, X } from 'lucide-react';
 import { CiDeliveryTruck } from 'react-icons/ci';
 import { RxRulerHorizontal } from 'react-icons/rx';
@@ -11,13 +14,15 @@ import { talles } from '../data/talles';
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { allShirts } = useAppContext();
+  const { shirt: firebaseShirt, isLoading: shirtLoading, error: shirtError } = useShirt(id || '');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [currentSizeGuideIndex, setCurrentSizeGuideIndex] = useState(0);
 
-  const shirt = allShirts.find(s => s.id === id);
+  // Use Firebase shirt if available, fallback to context shirt
+  const shirt = firebaseShirt || allShirts.find(s => s.id === id);
   
   // Auto rotate main image
   useEffect(() => {
@@ -45,10 +50,34 @@ const ProductDetail: React.FC = () => {
     return () => clearInterval(interval);
   }, [showSizeGuide]);
   
+  // Show loading state for shirt data
+  if (shirtLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <LoadingSpinner size="large" message="Cargando producto..." />
+      </div>
+    );
+  }
+
+  // Show error state for shirt data
+  if (shirtError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <ErrorMessage 
+          message={shirtError} 
+          onRetry={() => window.location.reload()} 
+        />
+      </div>
+    );
+  }
+
   if (!shirt) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-xl text-gray-600">Producto no encontrado</p>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Producto no encontrado</h1>
+          <p className="text-gray-600">Lo sentimos, el producto que buscas no existe.</p>
+        </div>
       </div>
     );
   }

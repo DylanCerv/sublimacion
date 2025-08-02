@@ -3,15 +3,23 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import ShirtCard from '../components/ShirtCard';
 import FilterSidebar from '../components/FilterSidebar';
-import { collections } from '../data/collections';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 
 const Products: React.FC = () => {
   const { collectionId } = useParams<{ collectionId?: string }>();
-  const { allShirts, filteredShirts, filters, setFilters } = useAppContext();
+  const { 
+    allShirts, 
+    filteredShirts, 
+    filters, 
+    setFilters, 
+    collections, 
+    isLoading, 
+    error, 
+    refreshData 
+  } = useAppContext();
   const navigate = useNavigate();
   const [hasInitialized, setHasInitialized] = useState(false);
-
-  console.log(allShirts);
 
   const collection = collectionId ? collections.find(c => c.id === collectionId) : null;
   
@@ -79,6 +87,30 @@ const Products: React.FC = () => {
 
   const pageTitle = collection ? `${collection.name}` : 'Todas las Camisas';
   const productCount = productsToShow.length;
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white flex">
+        <FilterSidebar />
+        <div className="flex-1 p-6">
+          <LoadingSpinner size="large" message="Cargando productos..." />
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex">
+        <FilterSidebar />
+        <div className="flex-1 p-6">
+          <ErrorMessage message={error} onRetry={refreshData} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex">

@@ -1,11 +1,16 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import type { Shirt, Filter } from '../types';
-import { shirts } from '../data/shirts';
+import type { Shirt, Filter, Collection } from '../types';
+import { useFirebase } from '../hooks/useFirebase';
+import { FirebaseService } from '../services/firebaseService';
+// Fallback data in case Firebase is not configured
+import { shirts as fallbackShirts } from '../data/shirts';
+import { collections as fallbackCollections } from '../data/collections';
 
 interface AppContextType {
   allShirts: Shirt[];
   filteredShirts: Shirt[];
+  collections: Collection[];
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   filters: Filter;
@@ -15,6 +20,9 @@ interface AppContextType {
   isCollectionSidebarOpen: boolean;
   setIsCollectionSidebarOpen: (open: boolean) => void;
   applyFilters: () => void;
+  isLoading: boolean;
+  error: string | null;
+  refreshData: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -32,8 +40,13 @@ interface AppProviderProps {
 }
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-  const [allShirts] = useState<Shirt[]>(shirts);
-  const [filteredShirts, setFilteredShirts] = useState<Shirt[]>(shirts);
+  // Use Firebase hook with fallback to local data
+  const { shirts: firebaseShirts, collections: firebaseCollections, isLoading, error, refreshData } = useFirebase();
+  
+  // State management
+  const [allShirts, setAllShirts] = useState<Shirt[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [filteredShirts, setFilteredShirts] = useState<Shirt[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState<Filter>({
     collections: [],
@@ -43,6 +56,22 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollectionSidebarOpen, setIsCollectionSidebarOpen] = useState(false);
+
+  // Update data when Firebase data changes or fallback to local data
+  useEffect(() => {
+    if (!isLoading) {
+      if (error) {
+        // Use fallback data if Firebase fails
+        console.warn('Using fallback data due to Firebase error:', error);
+        setAllShirts(fallbackShirts);
+        setCollections(fallbackCollections);
+      } else {
+        // Use Firebase data if available
+        setAllShirts(firebaseShirts);
+        setCollections(firebaseCollections);
+      }
+    }
+  }, [firebaseShirts, firebaseCollections, isLoading, error]);
 
   const applyFilters = () => {
     let filtered = allShirts;
@@ -85,13 +114,14 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setFilteredShirts(filtered);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     applyFilters();
   }, [searchTerm, filters, allShirts]);
 
   const value: AppContextType = {
     allShirts,
     filteredShirts,
+    collections,
     searchTerm,
     setSearchTerm,
     filters,
@@ -100,7 +130,10 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setIsSidebarOpen,
     isCollectionSidebarOpen,
     setIsCollectionSidebarOpen,
-    applyFilters
+    applyFilters,
+    isLoading,
+    error,
+    refreshData
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
