@@ -17,7 +17,7 @@ const ShirtCard: React.FC<ShirtCardProps> = ({ shirt, featured = false }) => {
   return (
     <Link
       to={`/product/${shirt.id}`}
-      className="group block bg-white overflow-hidden"
+      className="group block bg-white overflow-hidden w-fit"
     >
       <div 
         className="relative aspect-square overflow-hidden"

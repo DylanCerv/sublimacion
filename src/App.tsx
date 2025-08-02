@@ -10,6 +10,7 @@ import ProductDetail from './pages/ProductDetail';
 import Contact from './pages/Contact';
 import SizeGuide from './pages/SizeGuide';
 import InfoPage from './pages/InfoPage';
+import Footer from './components/Footer.tsx';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
               <Route path="/how-to-buy" element={<InfoPage />} />
             </Routes>
           </main>
-          
+          <Footer />
           <WhatsAppButton />
         </div>
       </Router>

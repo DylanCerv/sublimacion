@@ -1,58 +1,103 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import ShirtCard from '../components/ShirtCard';
 import { collections } from '../data/collections';
+import { FaTruckFast } from 'react-icons/fa6';
+import { IoShieldCheckmark } from 'react-icons/io5';
+import { IoMdChatboxes } from 'react-icons/io';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Home: React.FC = () => {
   const { allShirts } = useAppContext();
   const featuredShirts = allShirts.filter(shirt => shirt.featured).slice(0, 6);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-gray-900 to-gray-700 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Sublimación de Calidad
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-gray-300">
-            Diseños únicos inspirados en el mundo automotriz
-          </p>
-          <Link
-            to="/products"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors"
-          >
-            Ver Todo el Catálogo
-          </Link>
+      <section 
+        className="text-white py-20 bg-cover bg-center bg-no-repeat h-screen w-screen flex justify-center items-center max-w-[98.9vw] mx-auto overflow-hidden" 
+        style={{ 
+          backgroundImage: "url('https://acdn-us.mitiendanube.com/stores/003/856/863/themes/rio/2-slide-1745253666447-4242535366-1f408de47a2feed5497e96cc5200af471745253672-1920-1920.webp?795276416')",
+          backgroundSize: 'cover',
+          position: 'relative'
+        }}
+      >
+        <Link
+          to="/collection"
+          className="inline-block border border-white text-white font-semibold py-1 px-4 rounded-lg transition-colors"
+        >
+          Ver Todo
+        </Link>
+      </section>
+
+      {/* Featured Products - Carousel */}
+      <section className="py-16">
+        <div className="mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
+              Novedades
+            </h2>
+          </div>
+
+          <div className="relative px-4 md:px-8">
+            <button 
+              onClick={scrollLeft} 
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100"
+              aria-label="Anterior"
+            >
+              <FaChevronLeft size={20} />
+            </button>
+            
+            <div 
+              ref={carouselRef}
+              className="flex overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory gap-4 scroll-smooth"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {featuredShirts.map((shirt) => (
+                <div key={shirt.id} className="flex-none snap-start w-60 md:w-72">
+                  <ShirtCard shirt={shirt} featured />
+                </div>
+              ))}
+            </div>
+            
+            <button 
+              onClick={scrollRight} 
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100"
+              aria-label="Siguiente"
+            >
+              <FaChevronRight size={20} />
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Featured Products */}
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Productos Destacados
+            <h2 className="text-3xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
+              Destacados
             </h2>
-            <p className="text-xl text-gray-600">
-              Nuestras camisas más populares y exclusivas
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid justify-items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {featuredShirts.map((shirt) => (
               <ShirtCard key={shirt.id} shirt={shirt} featured />
             ))}
-          </div>
-
-          <div className="text-center">
-            <Link
-              to="/products"
-              className="inline-block bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors"
-            >
-              Ver Todas las Camisas
-            </Link>
           </div>
         </div>
       </section>
@@ -89,6 +134,37 @@ const Home: React.FC = () => {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Shipping and Services Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="flex flex-col items-center">
+              <div className="mb-4">
+                <FaTruckFast size={70} />
+              </div>
+              <h3 className="text-xl font-bold uppercase mb-2">ENVÍOS A TODO EL PAÍS</h3>
+              <p className="text-gray-600">Envíos gratis a partir de los $100.000</p>
+            </div>
+            
+            <div className="flex flex-col items-center">
+              <div className="mb-4">
+                <IoShieldCheckmark size={70} />
+              </div>
+              <h3 className="text-xl font-bold uppercase mb-2">COMPRA 100% SEGURA</h3>
+              <p className="text-gray-600">Tus datos totalmente protegidos</p>
+            </div>
+            
+            <div className="flex flex-col items-center">
+              <div className="mb-4">
+                <IoMdChatboxes size={70} />
+              </div>
+              <h3 className="text-xl font-bold uppercase mb-2">ESTAMOS PARA AYUDARTE</h3>
+              <p className="text-gray-600">Asistencia ante cualquier duda</p>
+            </div>
           </div>
         </div>
       </section>
