@@ -45,27 +45,14 @@ export interface ContactInfo {
   address?: string;
 }
 
-export interface ShippingConfig {
-  freeShippingThreshold: number;
-  freeShippingMessage: string;
-  shippingCost: number;
-  estimatedDelivery: string;
-}
-
 export interface SiteTexts {
-  heroTitle: string;
-  heroSubtitle: string;
-  aboutUs: string;
   footerDescription: string;
-  termsUrl?: string;
-  privacyUrl?: string;
 }
 
 export interface SiteSettings {
   id: string;
   contact: ContactInfo;
   socialNetworks: SocialNetwork[];
-  shipping: ShippingConfig;
   texts: SiteTexts;
   createdAt: Date;
   updatedAt: Date;

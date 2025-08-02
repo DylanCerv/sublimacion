@@ -389,7 +389,6 @@ export class FirebaseService {
         id: doc.id,
         contact: data.contact,
         socialNetworks: data.socialNetworks,
-        shipping: data.shipping,
         texts: data.texts,
         createdAt: data.createdAt?.toDate() || new Date(),
         updatedAt: data.updatedAt?.toDate() || new Date()
@@ -469,19 +468,8 @@ export class FirebaseService {
           enabled: false
         }
       ],
-      shipping: {
-        freeShippingThreshold: 100000,
-        freeShippingMessage: 'ENVIOS GRATIS APARTIR DE LOS $100.000',
-        shippingCost: 15000,
-        estimatedDelivery: '3-7 días hábiles'
-      },
       texts: {
-        heroTitle: 'DRIVEN - Sublimación Premium',
-        heroSubtitle: 'Diseños únicos inspirados en el mundo automotriz',
-        aboutUs: 'Somos una empresa dedicada a la sublimación de productos premium con diseños exclusivos del mundo automotriz.',
-        footerDescription: 'DRIVEN - Sublimación Premium. Diseños únicos para verdaderos fanáticos del automovilismo.',
-        termsUrl: '/terms',
-        privacyUrl: '/privacy'
+        footerDescription: 'DRIVEN - Sublimación Premium. Diseños únicos para verdaderos fanáticos del automovilismo.'
       },
       createdAt: new Date(),
       updatedAt: new Date()

@@ -56,18 +56,7 @@ export interface SettingsFormData {
     icon: string;
     enabled: boolean;
   }[];
-  shipping: {
-    freeShippingThreshold: number;
-    freeShippingMessage: string;
-    shippingCost: number;
-    estimatedDelivery: string;
-  };
   texts: {
-    heroTitle: string;
-    heroSubtitle: string;
-    aboutUs: string;
     footerDescription: string;
-    termsUrl: string;
-    privacyUrl: string;
   };
 }

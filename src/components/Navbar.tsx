@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
   const announcements = [
-    settings?.shipping.freeShippingMessage || "ENVIOS GRATIS APARTIR DE LOS $100.000",
+    "ENVIOS GRATIS APARTIR DE LOS $100.000",
     "5% DESCUENTO EN PAGOS CON TRANSFERENCIA",
     "ENVIOS A TODO EL PAIS"
   ];

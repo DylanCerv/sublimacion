@@ -169,7 +169,7 @@ const Home: React.FC = () => {
               </div>
               <h3 className="text-xl font-bold uppercase mb-2">ENVÍOS A TODO EL PAÍS</h3>
               <p className="text-gray-600">
-                {settings?.shipping.freeShippingMessage || "Envíos gratis a partir de los $100.000"}
+                Envíos gratis a partir de los $100.000
               </p>
             </div>
             

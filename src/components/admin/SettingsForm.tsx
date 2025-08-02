@@ -17,19 +17,8 @@ const SettingsForm: React.FC = () => {
       address: ''
     },
     socialNetworks: [],
-    shipping: {
-      freeShippingThreshold: 100000,
-      freeShippingMessage: '',
-      shippingCost: 15000,
-      estimatedDelivery: ''
-    },
     texts: {
-      heroTitle: '',
-      heroSubtitle: '',
-      aboutUs: '',
-      footerDescription: '',
-      termsUrl: '',
-      privacyUrl: ''
+      footerDescription: ''
     }
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -46,14 +35,8 @@ const SettingsForm: React.FC = () => {
           address: settings.contact.address || ''
         },
         socialNetworks: settings.socialNetworks,
-        shipping: settings.shipping,
         texts: {
-          heroTitle: settings.texts.heroTitle,
-          heroSubtitle: settings.texts.heroSubtitle,
-          aboutUs: settings.texts.aboutUs,
-          footerDescription: settings.texts.footerDescription,
-          termsUrl: settings.texts.termsUrl || '',
-          privacyUrl: settings.texts.privacyUrl || ''
+          footerDescription: settings.texts.footerDescription
         }
       });
     }
@@ -69,15 +52,7 @@ const SettingsForm: React.FC = () => {
     }));
   };
 
-  const handleShippingChange = (field: keyof typeof formData.shipping, value: string | number) => {
-    setFormData(prev => ({
-      ...prev,
-      shipping: {
-        ...prev.shipping,
-        [field]: value
-      }
-    }));
-  };
+
 
   const handleTextsChange = (field: keyof typeof formData.texts, value: string) => {
     setFormData(prev => ({
@@ -318,107 +293,12 @@ const SettingsForm: React.FC = () => {
             </div>
           </div>
 
-          {/* Shipping Configuration */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Configuración de Envíos</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Monto para envío gratuito
-                </label>
-                <input
-                  type="number"
-                  value={formData.shipping.freeShippingThreshold}
-                  onChange={(e) => handleShippingChange('freeShippingThreshold', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="100000"
-                />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Costo de envío
-                </label>
-                <input
-                  type="number"
-                  value={formData.shipping.shippingCost}
-                  onChange={(e) => handleShippingChange('shippingCost', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="15000"
-                />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Mensaje de envío gratuito
-                </label>
-                <input
-                  type="text"
-                  value={formData.shipping.freeShippingMessage}
-                  onChange={(e) => handleShippingChange('freeShippingMessage', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="ENVIOS GRATIS APARTIR DE LOS $100.000"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tiempo estimado de entrega
-                </label>
-                <input
-                  type="text"
-                  value={formData.shipping.estimatedDelivery}
-                  onChange={(e) => handleShippingChange('estimatedDelivery', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="3-7 días hábiles"
-                />
-              </div>
-            </div>
-          </div>
 
           {/* Site Texts */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Textos del Sitio</h3>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Título principal (Hero)
-                </label>
-                <input
-                  type="text"
-                  value={formData.texts.heroTitle}
-                  onChange={(e) => handleTextsChange('heroTitle', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="DRIVEN - Sublimación Premium"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Subtítulo principal (Hero)
-                </label>
-                <input
-                  type="text"
-                  value={formData.texts.heroSubtitle}
-                  onChange={(e) => handleTextsChange('heroSubtitle', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="Diseños únicos inspirados en el mundo automotriz"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Acerca de nosotros
-                </label>
-                <textarea
-                  value={formData.texts.aboutUs}
-                  onChange={(e) => handleTextsChange('aboutUs', e.target.value)}
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                  placeholder="Descripción de la empresa..."
-                />
-              </div>
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Descripción del footer
@@ -430,34 +310,6 @@ const SettingsForm: React.FC = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                   placeholder="Descripción que aparece en el footer..."
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL de términos y condiciones
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.texts.termsUrl}
-                    onChange={(e) => handleTextsChange('termsUrl', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                    placeholder="/terms"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL de política de privacidad
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.texts.privacyUrl}
-                    onChange={(e) => handleTextsChange('privacyUrl', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
-                    placeholder="/privacy"
-                  />
-                </div>
               </div>
             </div>
           </div>
