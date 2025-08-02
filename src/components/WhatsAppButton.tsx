@@ -1,10 +1,17 @@
 import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { useSettings } from '../hooks/useSettings';
 
 const WhatsAppButton: React.FC = () => {
+  const { settings } = useSettings();
+  
+  if (!settings?.contact.whatsapp) {
+    return null; // Don't show button if WhatsApp is not configured
+  }
+
   const handleWhatsAppClick = () => {
-    const phoneNumber = '5491112345678'; // Reemplazar con tu número
-    const message = 'Hola! Me interesa conocer más sobre sus camisas de sublimación.';
+    const phoneNumber = settings.contact.whatsapp;
+    const message = settings.contact.whatsappDefaultMessage || 'Hola! Me interesa conocer más sobre sus camisas de sublimación.';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };

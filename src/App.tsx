@@ -20,6 +20,7 @@ import ShirtManager from './pages/admin/ShirtManager';
 import CollectionManager from './pages/admin/CollectionManager';
 import ShirtForm from './components/admin/ShirtForm';
 import CollectionForm from './components/admin/CollectionForm';
+import SettingsForm from './components/admin/SettingsForm';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
@@ -42,6 +43,7 @@ function App() {
                     <Route path="collections" element={<CollectionManager />} />
                     <Route path="collections/new" element={<CollectionForm />} />
                     <Route path="collections/edit/:id" element={<CollectionForm />} />
+                    <Route path="settings" element={<SettingsForm />} />
                     <Route path="" element={<AdminDashboard />} />
                   </Routes>
                 </AdminLayout>

@@ -113,7 +113,7 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-white flex pt-10">
       <FilterSidebar />
       
       <div className="flex-1 p-6">

@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { useSettings } from '../hooks/useSettings';
 import ShirtCard from '../components/ShirtCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
@@ -11,6 +12,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Home: React.FC = () => {
   const { allShirts, collections, isLoading, error, refreshData } = useAppContext();
+  const { settings } = useSettings();
   const featuredShirts = allShirts.filter(shirt => shirt.featured).slice(0, 6);
   const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -113,7 +115,7 @@ const Home: React.FC = () => {
             </h2>
           </div>
 
-          <div className="grid justify-items-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="flex flex-wrap justify-center gap-8 mb-12">
             {featuredShirts.map((shirt) => (
               <ShirtCard key={shirt.id} shirt={shirt} featured />
             ))}
@@ -134,7 +136,7 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collections.slice(0, 6).map((collection) => (
+            {collections.map((collection) => (
               <Link
                 key={collection.id}
                 to={`/collection/${collection.id}`}
@@ -166,7 +168,9 @@ const Home: React.FC = () => {
                 <FaTruckFast size={70} />
               </div>
               <h3 className="text-xl font-bold uppercase mb-2">ENVÍOS A TODO EL PAÍS</h3>
-              <p className="text-gray-600">Envíos gratis a partir de los $100.000</p>
+              <p className="text-gray-600">
+                {settings?.shipping.freeShippingMessage || "Envíos gratis a partir de los $100.000"}
+              </p>
             </div>
             
             <div className="flex flex-col items-center">

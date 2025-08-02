@@ -42,6 +42,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       icon: Folder,
       label: 'Colecciones',
       description: 'Gestionar categorías'
+    },
+    {
+      path: '/admin/settings',
+      icon: Settings,
+      label: 'Configuración',
+      description: 'Ajustes del sitio'
     }
   ];
 

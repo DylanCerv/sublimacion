@@ -40,3 +40,34 @@ export interface CollectionFormData {
   description: string;
   image: string;
 }
+
+export interface SettingsFormData {
+  contact: {
+    phone: string;
+    whatsapp: string;
+    whatsappDefaultMessage: string;
+    email: string;
+    address: string;
+  };
+  socialNetworks: {
+    id: string;
+    name: string;
+    url: string;
+    icon: string;
+    enabled: boolean;
+  }[];
+  shipping: {
+    freeShippingThreshold: number;
+    freeShippingMessage: string;
+    shippingCost: number;
+    estimatedDelivery: string;
+  };
+  texts: {
+    heroTitle: string;
+    heroSubtitle: string;
+    aboutUs: string;
+    footerDescription: string;
+    termsUrl: string;
+    privacyUrl: string;
+  };
+}

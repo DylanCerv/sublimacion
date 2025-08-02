@@ -1,8 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTwitter, FaTiktok, FaYoutube, FaLinkedin } from 'react-icons/fa';
+import { useSettings } from '../hooks/useSettings';
 
 const Footer: React.FC = () => {
+    const { settings } = useSettings();
+
+    const getSocialIcon = (icon: string) => {
+        switch (icon) {
+            case 'facebook':
+                return FaFacebook;
+            case 'instagram':
+                return FaInstagram;
+            case 'twitter':
+                return FaTwitter;
+            case 'tiktok':
+                return FaTiktok;
+            case 'youtube':
+                return FaYoutube;
+            case 'linkedin':
+                return FaLinkedin;
+            default:
+                return FaInstagram;
+        }
+    };
+
     return (
         <footer className="bg-white border-t border-gray-200 pt-8 pb-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,12 +78,21 @@ const Footer: React.FC = () => {
                             CONTACTO
                         </h3>
                         <ul className="space-y-2">
-                            <li className="text-gray-600 text-sm">
-                                info@sublimacion.com
-                            </li>
-                            <li className="text-gray-600 text-sm">
-                                +54 11 1234-5678
-                            </li>
+                            {settings?.contact.email && (
+                                <li className="text-gray-600 text-sm">
+                                    {settings.contact.email}
+                                </li>
+                            )}
+                            {settings?.contact.phone && (
+                                <li className="text-gray-600 text-sm">
+                                    {settings.contact.phone}
+                                </li>
+                            )}
+                            {settings?.contact.address && (
+                                <li className="text-gray-600 text-sm">
+                                    {settings.contact.address}
+                                </li>
+                            )}
                             <li>
                                 <Link to="/contact" className="text-gray-600 hover:text-gray-900 text-sm">
                                     FORMULARIO DE CONTACTO
@@ -76,16 +107,29 @@ const Footer: React.FC = () => {
                             SÍGUENOS
                         </h3>
                         <div className="flex space-x-4">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
-                                <FaFacebook size={24} />
-                            </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
-                                <FaInstagram size={24} />
-                            </a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-900">
-                                <FaTwitter size={24} />
-                            </a>
+                            {settings?.socialNetworks
+                                .filter(network => network.enabled && network.url)
+                                .map((network) => {
+                                    const IconComponent = getSocialIcon(network.icon);
+                                    return (
+                                        <a
+                                            key={network.id}
+                                            href={network.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-gray-600 hover:text-gray-900"
+                                            title={network.name}
+                                        >
+                                            <IconComponent size={24} />
+                                        </a>
+                                    );
+                                })}
                         </div>
+                        {settings?.texts.footerDescription && (
+                            <p className="text-gray-600 text-sm mt-4">
+                                {settings.texts.footerDescription}
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>

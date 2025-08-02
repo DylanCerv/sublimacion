@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, Search, X } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
+import { useSettings } from '../hooks/useSettings';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const { searchTerm, setSearchTerm, setIsSidebarOpen, allShirts, collections } = useAppContext();
+  const { settings } = useSettings();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<{ type: 'shirt' | 'collection', item: any }[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const announcements = [
-    "ENVIOS GRATIS APARTIR DE LOS $100000",
+    settings?.shipping.freeShippingMessage || "ENVIOS GRATIS APARTIR DE LOS $100.000",
     "5% DESCUENTO EN PAGOS CON TRANSFERENCIA",
     "ENVIOS A TODO EL PAIS"
   ];

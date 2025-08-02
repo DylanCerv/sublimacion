@@ -1,13 +1,15 @@
 import { collection, getDocs, doc, getDoc, query, where, orderBy, addDoc, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
 import type { DocumentData } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import type { Shirt, Collection } from '../types';
+import type { Shirt, Collection, SiteSettings } from '../types';
+import type { AdminUser } from '../types/admin';
 
 // Collections names in Firestore
 const COLLECTIONS = {
   SHIRTS: 'shirts',
   COLLECTIONS: 'collections',
-  ADMINS: 'admins'
+  ADMINS: 'admins',
+  SETTINGS: 'settings'
 };
 
 export class FirebaseService {
@@ -364,6 +366,138 @@ export class FirebaseService {
       });
     } catch (error) {
       console.error('Error creating default admin:', error);
+    }
+  }
+
+  // SETTINGS MANAGEMENT
+
+  // Get site settings
+  static async getSettings(): Promise<SiteSettings | null> {
+    try {
+      const settingsRef = collection(db, COLLECTIONS.SETTINGS);
+      const querySnapshot = await getDocs(settingsRef);
+      
+      if (querySnapshot.empty) {
+        // Create default settings if none exist
+        return await this.createDefaultSettings();
+      }
+
+      const doc = querySnapshot.docs[0];
+      const data = doc.data();
+      
+      return {
+        id: doc.id,
+        contact: data.contact,
+        socialNetworks: data.socialNetworks,
+        shipping: data.shipping,
+        texts: data.texts,
+        createdAt: data.createdAt?.toDate() || new Date(),
+        updatedAt: data.updatedAt?.toDate() || new Date()
+      } as SiteSettings;
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      return null;
+    }
+  }
+
+  // Update site settings
+  static async updateSettings(settingsData: Partial<SiteSettings>): Promise<boolean> {
+    try {
+      const settingsRef = collection(db, COLLECTIONS.SETTINGS);
+      const querySnapshot = await getDocs(settingsRef);
+
+      if (querySnapshot.empty) {
+        // Create new settings document
+        await addDoc(settingsRef, {
+          ...settingsData,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      } else {
+        // Update existing settings
+        const docRef = doc(db, COLLECTIONS.SETTINGS, querySnapshot.docs[0].id);
+        await updateDoc(docRef, {
+          ...settingsData,
+          updatedAt: new Date()
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error updating settings:', error);
+      return false;
+    }
+  }
+
+  // Create default settings
+  static async createDefaultSettings(): Promise<SiteSettings> {
+    const defaultSettings: Omit<SiteSettings, 'id'> = {
+      contact: {
+        phone: '+54 11 1234-5678',
+        whatsapp: '5491123456789',
+        whatsappDefaultMessage: 'Hola! Me interesa obtener más información sobre sus productos.',
+        email: 'info@sublimacion.com',
+        address: 'Buenos Aires, Argentina'
+      },
+      socialNetworks: [
+        {
+          id: 'instagram',
+          name: 'Instagram',
+          url: 'https://instagram.com/sublimacion',
+          icon: 'instagram',
+          enabled: true
+        },
+        {
+          id: 'facebook',
+          name: 'Facebook',
+          url: 'https://facebook.com/sublimacion',
+          icon: 'facebook',
+          enabled: true
+        },
+        {
+          id: 'twitter',
+          name: 'Twitter',
+          url: 'https://twitter.com/sublimacion',
+          icon: 'twitter',
+          enabled: false
+        },
+        {
+          id: 'tiktok',
+          name: 'TikTok',
+          url: 'https://tiktok.com/@sublimacion',
+          icon: 'tiktok',
+          enabled: false
+        }
+      ],
+      shipping: {
+        freeShippingThreshold: 100000,
+        freeShippingMessage: 'ENVIOS GRATIS APARTIR DE LOS $100.000',
+        shippingCost: 15000,
+        estimatedDelivery: '3-7 días hábiles'
+      },
+      texts: {
+        heroTitle: 'DRIVEN - Sublimación Premium',
+        heroSubtitle: 'Diseños únicos inspirados en el mundo automotriz',
+        aboutUs: 'Somos una empresa dedicada a la sublimación de productos premium con diseños exclusivos del mundo automotriz.',
+        footerDescription: 'DRIVEN - Sublimación Premium. Diseños únicos para verdaderos fanáticos del automovilismo.',
+        termsUrl: '/terms',
+        privacyUrl: '/privacy'
+      },
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    try {
+      const settingsRef = collection(db, COLLECTIONS.SETTINGS);
+      const docRef = await addDoc(settingsRef, defaultSettings);
+      
+      return {
+        id: docRef.id,
+        ...defaultSettings
+      } as SiteSettings;
+    } catch (error) {
+      console.error('Error creating default settings:', error);
+      throw error;
     }
   }
 }
