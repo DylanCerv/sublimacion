@@ -3,9 +3,7 @@ import type { ReactNode } from 'react';
 import type { Shirt, Filter, Collection } from '../types';
 import { useFirebase } from '../hooks/useFirebase';
 import { FirebaseService } from '../services/firebaseService';
-// Fallback data in case Firebase is not configured
-import { shirts as fallbackShirts } from '../data/shirts';
-import { collections as fallbackCollections } from '../data/collections';
+
 
 interface AppContextType {
   allShirts: Shirt[];
@@ -57,31 +55,51 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollectionSidebarOpen, setIsCollectionSidebarOpen] = useState(false);
 
-  // Update data when Firebase data changes or fallback to local data
+  // Update data when Firebase data changes
   useEffect(() => {
-    if (!isLoading) {
-      if (error) {
-        // Use fallback data if Firebase fails
-        console.warn('Using fallback data due to Firebase error:', error);
-        setAllShirts(fallbackShirts);
-        setCollections(fallbackCollections);
-      } else {
-        // Use Firebase data if available
-        setAllShirts(firebaseShirts);
-        setCollections(firebaseCollections);
-      }
+    if (!isLoading && !error) {
+      // Use Firebase data when available
+      setAllShirts(firebaseShirts);
+      setCollections(firebaseCollections);
     }
   }, [firebaseShirts, firebaseCollections, isLoading, error]);
 
-  const applyFilters = () => {
+  const applyFilters = async () => {
+    // If we have Firebase data and search term or active filters, use Firebase search
+    const hasSearchTerm = searchTerm.trim() !== '';
+    const hasActiveFilters = filters.collections.length > 0 || 
+                            filters.sizes.length > 0 || 
+                            filters.colors.length > 0 ||
+                            filters.priceRange[0] > 0 || 
+                            filters.priceRange[1] < 50000;
+
+    if (!error && (hasSearchTerm || hasActiveFilters)) {
+      try {
+        // Use Firebase search with filters for better performance
+        const searchResults = await FirebaseService.searchShirts(searchTerm, {
+          collections: filters.collections.length > 0 ? filters.collections : undefined,
+          priceRange: filters.priceRange,
+          sizes: filters.sizes.length > 0 ? filters.sizes : undefined,
+          colors: filters.colors.length > 0 ? filters.colors : undefined,
+        });
+        setFilteredShirts(searchResults);
+        return;
+      } catch (searchError) {
+        console.warn('Firebase search failed, using local filtering:', searchError);
+      }
+    }
+
+    // Fallback to local filtering
     let filtered = allShirts;
 
-    // Apply search filter
-    if (searchTerm.trim()) {
+    // Apply search filter locally
+    if (hasSearchTerm) {
+      const searchTermLower = searchTerm.toLowerCase();
       filtered = filtered.filter(shirt =>
-        shirt.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        shirt.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        shirt.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+        shirt.name.toLowerCase().includes(searchTermLower) ||
+        shirt.description.toLowerCase().includes(searchTermLower) ||
+        shirt.collection.toLowerCase().includes(searchTermLower) ||
+        shirt.tags.some(tag => tag.toLowerCase().includes(searchTermLower))
       );
     }
 

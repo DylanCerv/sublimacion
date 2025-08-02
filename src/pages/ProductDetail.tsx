@@ -9,7 +9,12 @@ import { Minus, Plus, X } from 'lucide-react';
 import { CiDeliveryTruck } from 'react-icons/ci';
 import { RxRulerHorizontal } from 'react-icons/rx';
 import { FaWhatsapp } from 'react-icons/fa';
-import { talles } from '../data/talles';
+
+// Static size guide images - these don't change often so keeping them here is OK
+const talles = [
+  "https://d2r9epyceweg5n.cloudfront.net/stores/003/856/863/rte/Guia%20de%20talles.png",
+  "https://d2r9epyceweg5n.cloudfront.net/stores/003/856/863/rte/Guia%20de%20talles.png",
+];
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

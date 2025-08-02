@@ -50,7 +50,7 @@ function App() {
 
             {/* Public Routes */}
             <Route path="/*" element={
-              <div className="App">
+              <div className="App relative">
                 <Navbar />
                 <Sidebar />
                 <CollectionSidebar />

@@ -208,12 +208,14 @@ export class FirebaseService {
     }
   }
 
-  // Search shirts by text
-  static async searchShirts(searchTerm: string): Promise<Shirt[]> {
+  // Search shirts by text with advanced filtering
+  static async searchShirts(searchTerm: string, filters?: {
+    collections?: string[];
+    priceRange?: [number, number];
+    sizes?: string[];
+    colors?: string[];
+  }): Promise<Shirt[]> {
     try {
-      // Note: Firestore doesn't have full-text search built-in
-      // This is a basic implementation that searches by name
-      // For advanced search, consider using Algolia or similar
       const shirtsRef = collection(db, COLLECTIONS.SHIRTS);
       const querySnapshot = await getDocs(shirtsRef);
       
@@ -227,14 +229,43 @@ export class FirebaseService {
           ...data
         } as Shirt;
         
-        // Search in name, description, and tags
-        const matchesName = shirt.name.toLowerCase().includes(searchTermLower);
-        const matchesDescription = shirt.description.toLowerCase().includes(searchTermLower);
-        const matchesTags = shirt.tags.some(tag => 
-          tag.toLowerCase().includes(searchTermLower)
+        // Search in name, description, tags, and collection
+        const matchesSearch = !searchTerm || (
+          shirt.name.toLowerCase().includes(searchTermLower) ||
+          shirt.description.toLowerCase().includes(searchTermLower) ||
+          shirt.collection.toLowerCase().includes(searchTermLower) ||
+          shirt.tags.some(tag => tag.toLowerCase().includes(searchTermLower))
         );
         
-        if (matchesName || matchesDescription || matchesTags) {
+        // Apply filters if provided
+        let matchesFilters = true;
+        
+        if (filters) {
+          // Collection filter
+          if (filters.collections?.length && !filters.collections.includes(shirt.collection)) {
+            matchesFilters = false;
+          }
+          
+          // Price range filter
+          if (filters.priceRange && (
+            shirt.originalPrice < filters.priceRange[0] || 
+            shirt.originalPrice > filters.priceRange[1]
+          )) {
+            matchesFilters = false;
+          }
+          
+          // Size filter
+          if (filters.sizes?.length && !filters.sizes.some(size => shirt.sizes.includes(size))) {
+            matchesFilters = false;
+          }
+          
+          // Color filter
+          if (filters.colors?.length && (!shirt.colors || !filters.colors.some(color => shirt.colors!.includes(color)))) {
+            matchesFilters = false;
+          }
+        }
+        
+        if (matchesSearch && matchesFilters) {
           shirts.push(shirt);
         }
       });
@@ -243,6 +274,38 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error searching shirts:', error);
       throw new Error('Failed to search shirts in database');
+    }
+  }
+
+  // Get unique sizes from all shirts
+  static async getAvailableSizes(): Promise<string[]> {
+    try {
+      const shirts = await this.getShirts();
+      const sizes = new Set<string>();
+      shirts.forEach(shirt => {
+        shirt.sizes.forEach(size => sizes.add(size));
+      });
+      return Array.from(sizes).sort();
+    } catch (error) {
+      console.error('Error getting available sizes:', error);
+      return [];
+    }
+  }
+
+  // Get unique colors from all shirts
+  static async getAvailableColors(): Promise<string[]> {
+    try {
+      const shirts = await this.getShirts();
+      const colors = new Set<string>();
+      shirts.forEach(shirt => {
+        if (shirt.colors) {
+          shirt.colors.forEach(color => colors.add(color));
+        }
+      });
+      return Array.from(colors).sort();
+    } catch (error) {
+      console.error('Error getting available colors:', error);
+      return [];
     }
   }
 

@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import { talles } from '../data/talles';
+
+// Static size guide images - these don't change often so keeping them here is OK
+const talles = [
+  "https://d2r9epyceweg5n.cloudfront.net/stores/003/856/863/rte/Guia%20de%20talles.png",
+  "https://d2r9epyceweg5n.cloudfront.net/stores/003/856/863/rte/Guia%20de%20talles.png",
+];
 
 const SizeGuide: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

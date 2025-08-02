@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { collections } from '../data/collections';
 
 const FilterSidebar: React.FC = () => {
-  const { filters, setFilters } = useAppContext();
+  const { filters, setFilters, collections, allShirts } = useAppContext();
 
-  const allSizes = ['S', 'M', 'L', 'XL', 'XXL'];
-  const allColors = ['Negro', 'Blanco'];
+  // Get dynamic sizes and colors from actual products in Firebase
+  const { allSizes, allColors } = useMemo(() => {
+    const sizes = new Set<string>();
+    const colors = new Set<string>();
+
+    allShirts.forEach(shirt => {
+      shirt.sizes.forEach(size => sizes.add(size));
+      if (shirt.colors) {
+        shirt.colors.forEach(color => colors.add(color));
+      }
+    });
+
+    return {
+      allSizes: Array.from(sizes).sort(),
+      allColors: Array.from(colors).sort()
+    };
+  }, [allShirts]);
 
   const handleCollectionFilter = (collectionName: string) => {
     const newCollections = filters.collections.includes(collectionName)

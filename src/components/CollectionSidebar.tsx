@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { Link } from 'react-router-dom';
-import { collections } from '../data/collections';
 
 const CollectionSidebar: React.FC = () => {
-  const { isCollectionSidebarOpen, setIsCollectionSidebarOpen, setIsSidebarOpen } = useAppContext();
+  const { isCollectionSidebarOpen, setIsCollectionSidebarOpen, setIsSidebarOpen, collections } = useAppContext();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

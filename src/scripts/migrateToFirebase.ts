@@ -13,8 +13,8 @@
 import { collection, doc, setDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { FirebaseService } from '../services/firebaseService';
-import { shirts } from '../data/shirts';
-import { collections } from '../data/collections';
+// Note: This migration script is no longer needed as data is already in Firebase
+// Keeping for reference only - original data has been migrated
 import type { Shirt, Collection } from '../types';
 
 const COLLECTIONS = {
@@ -25,7 +25,12 @@ const COLLECTIONS = {
 // Function to upload shirts to Firebase
 const uploadShirts = async (): Promise<void> => {
     console.log('🔄 Starting shirts migration...');
+    console.log('⚠️  Migration script is disabled - data already exists in Firebase');
+    console.log('If you need to re-migrate, update this script with fresh data and uncomment the migration logic');
+    return;
 
+    /* 
+    // Original migration code - COMMENTED OUT as data is already migrated
     try {
         const shirtsRef = collection(db, COLLECTIONS.SHIRTS);
         let successCount = 0;
@@ -63,12 +68,18 @@ const uploadShirts = async (): Promise<void> => {
         console.error('💥 Fatal error during shirts migration:', error);
         throw error;
     }
+    */
 };
 
 // Function to upload collections to Firebase
 const uploadCollections = async (): Promise<void> => {
     console.log('🔄 Starting collections migration...');
+    console.log('⚠️  Migration script is disabled - data already exists in Firebase');
+    console.log('If you need to re-migrate, update this script with fresh data and uncomment the migration logic');
+    return;
 
+    /* 
+    // Original migration code - COMMENTED OUT as data is already migrated
     try {
         const collectionsRef = collection(db, COLLECTIONS.COLLECTIONS);
         let successCount = 0;
@@ -96,6 +107,7 @@ const uploadCollections = async (): Promise<void> => {
         console.error('💥 Fatal error during collections migration:', error);
         throw error;
     }
+    */
 };
 
 // Function to check if data already exists
