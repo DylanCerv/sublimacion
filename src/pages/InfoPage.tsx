@@ -2,10 +2,12 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Truck, RotateCcw, ShoppingCart, Package, CreditCard } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { useSettings } from '../hooks/useSettings';
 
 const InfoPage: React.FC = () => {
   const location = useLocation();
   const path = location.pathname;
+  const { settings } = useSettings();
 
   const getPageContent = () => {
     switch (path) {
@@ -141,18 +143,20 @@ const InfoPage: React.FC = () => {
           <p className="text-gray-300 mb-6 text-sm">
             No dudes en contactarnos por WhatsApp para resolver cualquier duda
           </p>
-          <button
-            onClick={() => {
-              const phoneNumber = '5491112345678';
-              const message = 'Hola! Tengo una consulta sobre sus productos.';
-              const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-              window.open(whatsappUrl, '_blank');
-            }}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-md transition-colors flex items-center justify-center mx-auto cursor-pointer"
-          >
-            <FaWhatsapp size={20} className="mr-2" />
-            Contactar por WhatsApp
-          </button>
+          {settings?.contact.whatsapp && (
+            <button
+              onClick={() => {
+                const phoneNumber = settings.contact.whatsapp;
+                const message = settings.contact.whatsappDefaultMessage || 'Hola! Tengo una consulta sobre sus productos.';
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-md transition-colors flex items-center justify-center mx-auto cursor-pointer"
+            >
+              <FaWhatsapp size={20} className="mr-2" />
+              Contactar por WhatsApp
+            </button>
+          )}
         </div>
       </div>
     </div>

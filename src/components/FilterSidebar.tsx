@@ -1,8 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
+import { X, Filter } from 'lucide-react';
 
 const FilterSidebar: React.FC = () => {
-  const { filters, setFilters, collections, allShirts } = useAppContext();
+  const { filters, setFilters, collections, allShirts, isFilterSidebarOpen, setIsFilterSidebarOpen } = useAppContext();
+  
+  // Check if it's mobile screen
+  const [isMobile, setIsMobile] = React.useState(false);
+  
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   // Get dynamic sizes and colors from actual products in Firebase
   const { allSizes, allColors } = useMemo(() => {
@@ -62,17 +77,49 @@ const FilterSidebar: React.FC = () => {
     });
   };
 
+  // Don't render on mobile unless open
+  if (isMobile && !isFilterSidebarOpen) {
+    return null;
+  }
+  
   return (
-    <div className="w-64 bg-white border-r border-gray-200 p-6 h-full overflow-y-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
-        <button 
-          onClick={clearAllFilters}
-          className="text-sm text-gray-500 hover:text-gray-700"
-        >
-          Limpiar
-        </button>
-      </div>
+    <>
+      {/* Mobile Overlay */}
+      {isMobile && isFilterSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsFilterSidebarOpen(false)}
+        />
+      )}
+      
+      {/* Filter Sidebar */}
+      <div className={`
+        ${isMobile 
+          ? 'fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out'
+          : 'w-64 bg-white border-r border-gray-200'
+        } p-4 sm:p-6 h-full overflow-y-auto
+        ${isMobile && isFilterSidebarOpen ? 'translate-x-0' : ''}
+        ${isMobile && !isFilterSidebarOpen ? 'translate-x-full' : ''}
+      `}>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={clearAllFilters}
+              className="text-sm text-gray-500 hover:text-gray-700"
+            >
+              Limpiar
+            </button>
+            {isMobile && (
+              <button
+                onClick={() => setIsFilterSidebarOpen(false)}
+                className="p-1 hover:bg-gray-100 rounded-md lg:hidden"
+              >
+                <X className="h-5 w-5 text-gray-500" />
+              </button>
+            )}
+          </div>
+        </div>
       
       {/* Colecciones */}
       <div className="mb-8">
@@ -171,7 +218,8 @@ const FilterSidebar: React.FC = () => {
           />
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

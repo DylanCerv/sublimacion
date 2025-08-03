@@ -120,7 +120,7 @@ const ProductDetail: React.FC = () => {
   };
 
   return (
-    <div className="bg-white pt-8">
+    <div className="bg-white pt-4 sm:pt-8">
       {showSizeGuide && (
         <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-auto relative">
@@ -130,8 +130,8 @@ const ProductDetail: React.FC = () => {
             >
               <X size={20} />
             </button>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-4">Guía de Talles</h3>
+            <div className="p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold mb-4">Guía de Talles</h3>
               <div className="flex justify-center">
                 <img 
                   src={talles[currentSizeGuideIndex]} 
@@ -144,34 +144,38 @@ const ProductDetail: React.FC = () => {
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="md:flex justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-4 py-4 sm:py-8">
+        <div className="md:flex justify-between gap-4 sm:gap-8">
           {/* Left side - Images */}
-          <div className="flex flex-col md:flex-row-reverse gap-4">
+          <div className="flex flex-col md:flex-row-reverse gap-2 sm:gap-4 mb-6 md:mb-0">
             <div className="flex-1">
               <img
                 src={shirt.images[selectedImageIndex]}
                 alt={shirt.name}
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-contain rounded-lg"
               />
             </div>
-            <div className="flex flex-row md:flex-col gap-4 overflow-x-auto w-full md:w-28">
+            <div className="flex flex-row md:flex-col gap-2 sm:gap-4 overflow-x-auto w-full md:w-20 sm:md:w-28">
               {shirt.images.map((image, index) => (
                 <img
                   key={index}
                   src={image}
                   alt={`${shirt.name} view ${index + 1}`}
                   onClick={() => setSelectedImageIndex(index)}
-                  className={`w-28 h-28 object-cover cursor-pointer ${selectedImageIndex === index ? 'border-2 border-black/50' : ''}`}
+                  className={`w-20 h-20 sm:w-28 sm:h-28 object-cover cursor-pointer rounded-lg transition-all ${
+                    selectedImageIndex === index 
+                      ? 'border-2 border-black/50 opacity-100' 
+                      : 'border border-gray-200 opacity-70 hover:opacity-100'
+                  }`}
                 />
               ))}
             </div>
           </div>
 
           {/* Right side - Product Info */}
-          <div className="md:max-w-md w-md">
-            <div className="mb-4 space-y-4 border-b pb-4 border-gray-200">
-              <h1 className="text-2xl font-bold">{shirt.name}</h1>
+          <div className="md:max-w-md w-full">
+            <div className="mb-4 sm:mb-6 space-y-3 sm:space-y-4 border-b pb-4 border-gray-200">
+              <h1 className="text-xl sm:text-2xl font-bold">{shirt.name}</h1>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   {shirt.originalPrice && (

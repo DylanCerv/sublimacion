@@ -5,6 +5,7 @@ import ShirtCard from '../components/ShirtCard';
 import FilterSidebar from '../components/FilterSidebar';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
+import { Filter } from 'lucide-react';
 
 const Products: React.FC = () => {
   const { collectionId } = useParams<{ collectionId?: string }>();
@@ -16,7 +17,9 @@ const Products: React.FC = () => {
     collections, 
     isLoading, 
     error, 
-    refreshData 
+    refreshData,
+    isFilterSidebarOpen,
+    setIsFilterSidebarOpen
   } = useAppContext();
   const navigate = useNavigate();
   const [hasInitialized, setHasInitialized] = useState(false);
@@ -113,21 +116,33 @@ const Products: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex pt-10">
-      <FilterSidebar />
-      
-      <div className="flex-1 p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            {pageTitle}
-          </h1>
-          <p className="text-gray-600 text-sm">
-            {showingAllProducts ? 
-              `Mostrando todos los ${productCount} productos` :
-              `${productCount} productos${collection ? ' en esta colección' : ' encontrados'}`
-            }
-          </p>
-        </div>
+    <div className="min-h-screen bg-white">
+      <div className="flex pt-10">
+        {/* Mobile Filter Sidebar */}
+        <FilterSidebar />
+        
+        <div className="flex-1 p-4 lg:p-6">
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <h1 className="text-xl lg:text-2xl font-bold text-gray-900">
+                {pageTitle}
+              </h1>
+              {/* Mobile Filter Button */}
+              <button
+                onClick={() => setIsFilterSidebarOpen(true)}
+                className="lg:hidden flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              >
+                <Filter className="h-4 w-4" />
+                <span className="text-sm">Filtros</span>
+              </button>
+            </div>
+            <p className="text-gray-600 text-sm">
+              {showingAllProducts ? 
+                `Mostrando todos los ${productCount} productos` :
+                `${productCount} productos${collection ? ' en esta colección' : ' encontrados'}`
+              }
+            </p>
+          </div>
 
         {productsToShow.length === 0 ? (
           <div className="text-center py-12">
@@ -150,12 +165,13 @@ const Products: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-            {productsToShow.map((shirt) => (
-              <ShirtCard key={shirt.id} shirt={shirt} />
-            ))}
-          </div>
-        )}
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-4">
+              {productsToShow.map((shirt) => (
+                <ShirtCard key={shirt.id} shirt={shirt} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -26,9 +26,9 @@ const Footer: React.FC = () => {
     };
 
     return (
-        <footer className="bg-white border-t border-gray-200 pt-8 pb-6">
+        <footer className="bg-white border-t border-gray-200 pt-6 sm:pt-8 pb-4 sm:pb-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
                     {/* Column 1 */}
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
@@ -91,6 +91,12 @@ const Footer: React.FC = () => {
                             {settings?.contact.address && (
                                 <li className="text-gray-600 text-sm">
                                     {settings.contact.address}
+                                </li>
+                            )}
+                            {settings?.contact.businessHours && (
+                                <li className="text-gray-600 text-sm pt-2" style={{ whiteSpace: 'pre-line' }}>
+                                    <strong>Horarios:</strong><br />
+                                    {settings.contact.businessHours}
                                 </li>
                             )}
                             <li>

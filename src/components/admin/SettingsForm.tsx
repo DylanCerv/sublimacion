@@ -14,7 +14,8 @@ const SettingsForm: React.FC = () => {
       whatsapp: '',
       whatsappDefaultMessage: '',
       email: '',
-      address: ''
+      address: '',
+      businessHours: ''
     },
     socialNetworks: [],
     texts: {
@@ -32,7 +33,8 @@ const SettingsForm: React.FC = () => {
           whatsapp: settings.contact.whatsapp,
           whatsappDefaultMessage: settings.contact.whatsappDefaultMessage,
           email: settings.contact.email,
-          address: settings.contact.address || ''
+          address: settings.contact.address || '',
+          businessHours: settings.contact.businessHours || ''
         },
         socialNetworks: settings.socialNetworks,
         texts: {
@@ -201,6 +203,21 @@ const SettingsForm: React.FC = () => {
                   onChange={(e) => handleContactChange('address', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
                   placeholder="Buenos Aires, Argentina"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Horario de Atención
+                </label>
+                <textarea
+                  value={formData.contact.businessHours}
+                  onChange={(e) => handleContactChange('businessHours', e.target.value)}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-gray-500"
+                  placeholder="Lunes a Viernes: 9:00 - 18:00
+Sábados: 9:00 - 13:00
+Domingos: Cerrado"
                 />
               </div>
             </div>

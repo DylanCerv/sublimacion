@@ -49,20 +49,20 @@ const Sidebar: React.FC = () => {
 
       {/* Sidebar */}
       <div 
-        className={`fixed top-0 left-0 h-full w-80 bg-white shadow-xl z-50 transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 sm:w-80 max-w-[85vw] bg-white shadow-xl z-50 transition-all duration-300 ease-in-out ${
           isSidebarOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
         }`}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-100">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-100">
           <X 
-            size={24} 
-            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 cursor-pointer" 
+            size={20} 
+            className="sm:w-6 sm:h-6 text-gray-600 hover:text-gray-900 hover:bg-gray-100 cursor-pointer p-1 rounded" 
             onClick={() => setIsSidebarOpen(false)} 
           />
         </div>
 
-        <nav className="p-4">
-          <ul className="space-y-6">
+        <nav className="p-4 sm:p-6">
+          <ul className="space-y-4 sm:space-y-6">
             {menuItems.map((item, index) => (
               <li 
                 key={index} 
@@ -77,17 +77,17 @@ const Sidebar: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <button
                       onClick={() => handleItemClick(item)}
-                      className="w-full text-left text-gray-800 font-medium text-sm cursor-pointer"
+                      className="w-full text-left text-gray-800 font-medium text-sm sm:text-base cursor-pointer py-2"
                     >
                       {item.label}
                     </button>
-                    <span className="text-gray-500 cursor-pointer">→</span>
+                    <span className="text-gray-500 cursor-pointer text-lg">→</span>
                   </div>
                 ) : (
                   <Link
                     to={item.path}
                     onClick={() => handleItemClick(item)}
-                    className="block text-gray-800 font-medium text-sm cursor-pointer"
+                    className="block text-gray-800 font-medium text-sm sm:text-base cursor-pointer py-2 hover:text-gray-600 transition-colors"
                   >
                     {item.label}
                   </Link>

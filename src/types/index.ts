@@ -43,6 +43,7 @@ export interface ContactInfo {
   whatsappDefaultMessage: string;
   email: string;
   address?: string;
+  businessHours: string;
 }
 
 export interface SiteTexts {

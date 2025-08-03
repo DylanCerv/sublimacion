@@ -111,14 +111,14 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="bg-white shadow-md">
-          <div className="mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
+          <div className="mx-auto px-2 sm:px-4 lg:px-8">
+            <div className="flex justify-between items-center h-12 sm:h-14 md:h-16">
               {/* Hamburger Menu */}
-              <div className="flex items-center space-x-4 w-48">
+              <div className="flex items-center space-x-4 w-12 sm:w-24 lg:w-48">
                 <Menu
                   onClick={() => setIsSidebarOpen(true)}
-                  size={24}
-                  className="rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer"
+                  size={20}
+                  className="rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 cursor-pointer sm:w-6 sm:h-6"
                 />
               </div>
 
@@ -128,35 +128,34 @@ const Navbar: React.FC = () => {
                   <img
                     src="https://acdn-us.mitiendanube.com/stores/003/856/863/themes/common/logo-339415911-1738341627-c0b8a891d660d5e30b99eb3cdec64b5f1738341627-480-0.webp"
                     alt="Driven Logo"
-                    className="h-16 w-auto my-4"
+                    className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto my-2 sm:my-3 md:my-4"
                   />
                 </Link>
               </div>
 
-              {/* Search Bar - Now visible on all devices */}
-              <div className="w-fit">
+              {/* Search Bar - Responsive */}
+              <div className="w-20 sm:w-32 md:w-48 lg:w-fit">
                 <div className="relative" ref={searchRef}>
                   <form onSubmit={handleSearchSubmit}>
                     <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400" />
+                      <div className="absolute inset-y-0 left-0 pl-2 sm:pl-3 flex items-center pointer-events-none">
+                        <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
                       </div>
                       <input
                         type="text"
-                        placeholder="Buscar productos..."
+                        placeholder="Buscar..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onFocus={() => searchTerm.trim() && suggestions.length > 0 && setShowSuggestions(true)}
-                        className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 text-sm"
-                        style={{ width: '230px' }}
+                        className="block w-full pl-8 sm:pl-10 pr-8 sm:pr-10 py-1.5 sm:py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 text-xs sm:text-sm"
                       />
                       {searchTerm && (
                         <button
                           type="button"
                           onClick={clearSearch}
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                          className="absolute inset-y-0 right-0 pr-2 sm:pr-3 flex items-center"
                         >
-                          <X className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                          <X className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400 hover:text-gray-600" />
                         </button>
                       )}
                     </div>
@@ -164,7 +163,7 @@ const Navbar: React.FC = () => {
 
                   {/* Search Suggestions Dropdown */}
                   {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-64 overflow-y-auto" style={{ width: '230px' }}>
+                    <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-64 overflow-y-auto w-64 sm:w-80 md:w-96">
                       {suggestions.map((suggestion, index) => (
                         <button
                           key={`${suggestion.type}-${suggestion.item.id}-${index}`}

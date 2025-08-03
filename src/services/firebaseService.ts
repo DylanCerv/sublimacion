@@ -436,7 +436,8 @@ export class FirebaseService {
         whatsapp: '5491123456789',
         whatsappDefaultMessage: 'Hola! Me interesa obtener más información sobre sus productos.',
         email: 'info@sublimacion.com',
-        address: 'Buenos Aires, Argentina'
+        address: 'Buenos Aires, Argentina',
+        businessHours: 'Lunes a Viernes: 9:00 - 18:00\nSábados: 9:00 - 13:00\nDomingos: Cerrado'
       },
       socialNetworks: [
         {

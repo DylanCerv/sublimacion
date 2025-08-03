@@ -48,6 +48,7 @@ export interface SettingsFormData {
     whatsappDefaultMessage: string;
     email: string;
     address: string;
+    businessHours: string;
   };
   socialNetworks: {
     id: string;

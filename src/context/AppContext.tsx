@@ -17,6 +17,8 @@ interface AppContextType {
   setIsSidebarOpen: (open: boolean) => void;
   isCollectionSidebarOpen: boolean;
   setIsCollectionSidebarOpen: (open: boolean) => void;
+  isFilterSidebarOpen: boolean;
+  setIsFilterSidebarOpen: (open: boolean) => void;
   applyFilters: () => void;
   isLoading: boolean;
   error: string | null;
@@ -54,6 +56,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollectionSidebarOpen, setIsCollectionSidebarOpen] = useState(false);
+  const [isFilterSidebarOpen, setIsFilterSidebarOpen] = useState(false);
 
   // Update data when Firebase data changes
   useEffect(() => {
@@ -144,10 +147,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setSearchTerm,
     filters,
     setFilters,
-    isSidebarOpen,
+              isSidebarOpen,
     setIsSidebarOpen,
     isCollectionSidebarOpen,
     setIsCollectionSidebarOpen,
+    isFilterSidebarOpen,
+    setIsFilterSidebarOpen,
     applyFilters,
     isLoading,
     error,
