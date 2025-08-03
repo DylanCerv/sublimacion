@@ -8,7 +8,10 @@ import {
   Star,
   Plus,
   Package,
-  BarChart3
+  BarChart3,
+  ArrowUpRight,
+  Activity,
+  ShoppingBag
 } from 'lucide-react';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -47,80 +50,96 @@ const AdminDashboard: React.FC = () => {
 
   const statsCards = [
     {
-      title: 'Total Camisetas',
+      title: 'Total Productos',
       value: stats.totalShirts,
-      icon: Shirt,
-      color: 'bg-blue-500',
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-700'
+      icon: ShoppingBag,
+      trend: '+12%',
+      description: 'productos activos',
+      gradient: 'from-blue-50 to-indigo-50',
+      iconColor: 'text-blue-600',
+      textColor: 'text-gray-900'
     },
     {
       title: 'Colecciones',
       value: stats.totalCollections,
       icon: Folder,
-      color: 'bg-green-500',
-      bgColor: 'bg-green-50',
-      textColor: 'text-green-700'
+      trend: '+3%',
+      description: 'categorías disponibles',
+      gradient: 'from-emerald-50 to-teal-50',
+      iconColor: 'text-emerald-600',
+      textColor: 'text-gray-900'
     },
     {
-      title: 'Productos Destacados',
+      title: 'Destacados',
       value: stats.featuredShirts,
       icon: Star,
-      color: 'bg-yellow-500',
-      bgColor: 'bg-yellow-50',
-      textColor: 'text-yellow-700'
+      trend: '+8%',
+      description: 'productos promocionados',
+      gradient: 'from-amber-50 to-orange-50',
+      iconColor: 'text-amber-600',
+      textColor: 'text-gray-900'
     },
     {
       title: 'Precio Promedio',
       value: `$${stats.averagePrice.toLocaleString()}`,
       icon: TrendingUp,
-      color: 'bg-purple-500',
-      bgColor: 'bg-purple-50',
-      textColor: 'text-purple-700'
+      trend: '+5%',
+      description: 'precio medio',
+      gradient: 'from-purple-50 to-pink-50',
+      iconColor: 'text-purple-600',
+      textColor: 'text-gray-900'
     }
   ];
 
   const quickActions = [
     {
-      title: 'Agregar Camiseta',
-      description: 'Crear un nuevo producto',
+      title: 'Nuevo Producto',
+      description: 'Agregar camiseta',
       icon: Plus,
       link: '/admin/shirts/new',
-      color: 'bg-indigo-600 hover:bg-indigo-700'
+      primary: true
     },
     {
       title: 'Nueva Colección',
-      description: 'Crear una nueva categoría',
+      description: 'Crear categoría',
       icon: Package,
       link: '/admin/collections/new',
-      color: 'bg-green-600 hover:bg-green-700'
+      primary: false
     },
     {
-      title: 'Ver Camisetas',
-      description: 'Gestionar productos existentes',
+      title: 'Gestionar Productos',
+      description: 'Ver inventario',
       icon: Shirt,
       link: '/admin/shirts',
-      color: 'bg-blue-600 hover:bg-blue-700'
+      primary: false
     },
     {
       title: 'Ver Colecciones',
-      description: 'Gestionar categorías',
+      description: 'Administrar categorías',
       icon: Folder,
       link: '/admin/collections',
-      color: 'bg-purple-600 hover:bg-purple-700'
+      primary: false
     }
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Welcome Header */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Panel de Administración
-        </h1>
-        <p className="text-gray-600">
-          Gestiona productos, colecciones y configura tu tienda de sublimación.
-        </p>
+      <div className="mb-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-light text-gray-900 mb-2">
+              Dashboard
+            </h1>
+            <p className="text-gray-500 text-lg">
+              Resumen de tu tienda de sublimación
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Activity className="h-5 w-5 text-green-500" />
+            <span className="text-sm text-gray-600">Sistema activo</span>
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards */}
@@ -128,14 +147,22 @@ const AdminDashboard: React.FC = () => {
         {statsCards.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <div key={index} className={`${stat.bgColor} rounded-lg p-6 border border-gray-200`}>
-              <div className="flex items-center">
-                <div className={`${stat.color} p-3 rounded-lg`}>
-                  <Icon className="h-6 w-6 text-white" />
+            <div 
+              key={index} 
+              className={`bg-gradient-to-br ${stat.gradient} border border-gray-100 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className={`${stat.iconColor} mb-4`}>
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
+                  <p className={`text-3xl font-light ${stat.textColor} mb-1`}>{stat.value}</p>
+                  <p className="text-xs text-gray-500">{stat.description}</p>
                 </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</p>
+                <div className="flex items-center text-green-600 text-xs font-medium">
+                  <ArrowUpRight className="h-3 w-3 mr-1" />
+                  {stat.trend}
                 </div>
               </div>
             </div>
@@ -144,8 +171,11 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h2>
+      <div className="bg-white rounded-2xl border border-gray-100 p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-medium text-gray-900">Acciones Rápidas</h2>
+          <div className="w-16 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
@@ -153,13 +183,26 @@ const AdminDashboard: React.FC = () => {
               <Link
                 key={index}
                 to={action.link}
-                className={`${action.color} text-white p-4 rounded-lg transition-colors hover:scale-105 transform duration-200`}
+                className={`group relative p-6 rounded-xl border-2 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
+                  action.primary 
+                    ? 'border-gray-900 bg-gray-900 text-white hover:bg-gray-800' 
+                    : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300'
+                }`}
               >
-                <div className="flex items-center mb-2">
-                  <Icon className="h-5 w-5 mr-2" />
-                  <h3 className="font-medium">{action.title}</h3>
+                <div className="flex flex-col items-start">
+                  <div className={`mb-4 ${action.primary ? 'text-white' : 'text-gray-600'}`}>
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-medium mb-1">{action.title}</h3>
+                  <p className={`text-sm ${action.primary ? 'text-gray-300' : 'text-gray-500'}`}>
+                    {action.description}
+                  </p>
                 </div>
-                <p className="text-sm opacity-90">{action.description}</p>
+                <ArrowUpRight 
+                  className={`absolute top-6 right-6 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity ${
+                    action.primary ? 'text-white' : 'text-gray-400'
+                  }`} 
+                />
               </Link>
             );
           })}
@@ -167,48 +210,57 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Shirts */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Productos Recientes</h2>
+        <div className="bg-white rounded-2xl border border-gray-100 p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-medium text-gray-900">Productos Recientes</h2>
             <Link 
               to="/admin/shirts" 
-              className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+              className="text-gray-500 hover:text-gray-900 text-sm font-medium flex items-center group"
             >
               Ver todos
+              <ArrowUpRight className="h-4 w-4 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </div>
           
           {allShirts.length === 0 ? (
-            <div className="text-center py-8">
-              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No hay productos existentes</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Package className="h-8 w-8 text-gray-400" />
+              </div>
+              <p className="text-gray-600 mb-4">No hay productos aún</p>
               <Link 
                 to="/admin/shirts/new" 
-                className="text-indigo-600 hover:text-indigo-700 text-sm font-medium mt-2 inline-block"
+                className="inline-flex items-center text-gray-900 hover:text-gray-700 font-medium"
               >
-                Crear el primer producto
+                Crear primer producto
+                <ArrowUpRight className="h-4 w-4 ml-1" />
               </Link>
             </div>
           ) : (
-            <div className="space-y-3">
-              {allShirts.slice(0, 5).map((shirt) => (
-                <div key={shirt.id} className="flex items-center p-3 bg-gray-50 rounded-lg">
-                  <img 
-                    src={shirt.images[0]} 
-                    alt={shirt.name}
-                    className="w-12 h-12 object-cover rounded-lg mr-3"
-                  />
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{shirt.name}</h3>
-                    <p className="text-sm text-gray-600">{shirt.collection}</p>
+            <div className="space-y-4">
+              {allShirts.slice(-5).reverse().map((shirt) => (
+                <div key={shirt.id} className="group flex items-center p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                  <div className="relative">
+                    <img 
+                      src={shirt.images[0]} 
+                      alt={shirt.name}
+                      className="w-14 h-14 object-cover rounded-xl"
+                    />
+                    {shirt.featured && (
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center">
+                        <Star className="h-3 w-3 text-white" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 ml-4 min-w-0">
+                    <h3 className="font-medium text-gray-900 truncate">{shirt.name}</h3>
+                    <p className="text-sm text-gray-500">{shirt.collection}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-medium text-gray-900">${shirt.originalPrice.toLocaleString()}</p>
-                    {shirt.featured && (
-                      <Star className="h-4 w-4 text-yellow-500 ml-auto" />
-                    )}
+                    <ArrowUpRight className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity ml-auto" />
                   </div>
                 </div>
               ))}
@@ -217,48 +269,57 @@ const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Collections Overview */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Colecciones</h2>
+        <div className="bg-white rounded-2xl border border-gray-100 p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-medium text-gray-900">Colecciones Activas</h2>
             <Link 
               to="/admin/collections" 
-              className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+              className="text-gray-500 hover:text-gray-900 text-sm font-medium flex items-center group"
             >
               Ver todas
+              <ArrowUpRight className="h-4 w-4 ml-1 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </div>
           
           {collections.length === 0 ? (
-            <div className="text-center py-8">
-              <Folder className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No hay colecciones existentes</p>
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Folder className="h-8 w-8 text-gray-400" />
+              </div>
+              <p className="text-gray-600 mb-4">No hay colecciones aún</p>
               <Link 
                 to="/admin/collections/new" 
-                className="text-indigo-600 hover:text-indigo-700 text-sm font-medium mt-2 inline-block"
+                className="inline-flex items-center text-gray-900 hover:text-gray-700 font-medium"
               >
-                Crear la primera colección
+                Crear primera colección
+                <ArrowUpRight className="h-4 w-4 ml-1" />
               </Link>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {collections.map((collection) => {
                 const collectionShirtCount = allShirts.filter(
                   shirt => shirt.collection === collection.name
                 ).length;
                 
                 return (
-                  <div key={collection.id} className="flex items-center p-3 bg-gray-50 rounded-lg">
+                  <div key={collection.id} className="group flex items-center p-4 rounded-xl hover:bg-gray-50 transition-colors">
                     <img 
                       src={collection.image} 
                       alt={collection.name}
-                      className="w-12 h-12 object-cover rounded-lg mr-3"
+                      className="w-14 h-14 object-cover rounded-xl"
                     />
-                    <div className="flex-1">
-                      <h3 className="font-medium text-gray-900">{collection.name}</h3>
-                      <p className="text-sm text-gray-600">{collection.description}</p>
+                    <div className="flex-1 ml-4 min-w-0">
+                      <h3 className="font-medium text-gray-900 truncate">{collection.name}</h3>
+                      <p className="text-sm text-gray-500 truncate">{collection.description}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium text-gray-900">{collectionShirtCount} productos</p>
+                      <div className="flex items-center space-x-2">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                          {collectionShirtCount}
+                        </span>
+                        <ArrowUpRight className="h-4 w-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
                     </div>
                   </div>
                 );
